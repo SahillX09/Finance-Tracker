@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Set Monthly Income{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 3rem auto;">
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="width: 64px; height: 64px; background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(14, 165, 233, 0.2) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2rem;">
+                💰
+            </div>
+            <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">
+                Set Your Monthly Income
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.9375rem;">
+                Help us understand your financial capacity to provide better insights
+            </p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label class="form-label">Monthly Income</label>
+                <div style="position: relative;">
+                    <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-weight: 600; font-size: 1.125rem;">₹</span>
+                    <input type="number" 
+                           name="monthly_income" 
+                           class="form-control" 
+                           style="padding-left: 2.5rem; font-size: 1.25rem; font-weight: 600;"
+                           step="0.01" 
+                           value="{{ profile.monthly_income }}"
+                           placeholder="50000"
+                           required>
+                </div>
+                <div style="color: var(--text-tertiary); font-size: 0.8125rem; margin-top: 0.5rem;">
+                    Your total income per month from all sources (salary, freelance, investments, etc.)
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(14, 165, 233, 0.1) 100%); border: 1px solid rgba(14, 165, 233, 0.2); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; gap: 0.75rem;">
+                    <div style="font-size: 1.5rem;">💡</div>
+                    <div>
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; font-size: 0.9375rem;">
+                            Why we need this?
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.5;">
+                            This helps us calculate your spending percentage and provide personalized financial insights.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    Save Income
+                </button>
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                    Skip for Now
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

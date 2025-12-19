@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Transaction{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 3rem auto;">
+    <div class="card">
+        <div style="margin-bottom: 2rem;">
+            <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">
+                Edit Transaction
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.9375rem;">
+                Update the details of your transaction
+            </p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label class="form-label">Transaction Title</label>
+                {{ form.title }}
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Amount (₹)</label>
+                    {{ form.amount }}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    {{ form.date }}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    {{ form.category }}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    {{ form.transaction_type }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                {{ form.description }}
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    Update Transaction
+                </button>
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

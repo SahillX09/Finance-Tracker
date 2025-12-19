@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h1 class="page-title">Analytics & Insights</h1>
+            <p class="page-subtitle">Visual breakdown of your financial data</p>
+        </div>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+</div>
+
+<!-- Income vs Expense Trend -->
+<div class="card" style="margin-bottom: 2rem;">
+    <div class="card-header">
+        <h2 class="card-title">Income vs Expense Trend (Last 6 Months)</h2>
+    </div>
+    <div style="padding: 2rem;">
+        <canvas id="trendChart" style="max-height: 300px;"></canvas>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+    <!-- Category Breakdown -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Top Expense Categories (This Month)</h2>
+        </div>
+        <div style="padding: 2rem;">
+            <canvas id="categoryChart" style="max-height: 300px;"></canvas>
+        </div>
+    </div>
+    
+    <!-- Summary Stats -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Quick Stats</h2>
+        </div>
+        <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+            {% for item in category_data %}
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                <span style="font-weight: 600;">{{ item.category__name|default:"Uncategorized" }}</span>
+                <span style="font-weight: 700; color: var(--danger);">₹{{ item.total|floatformat:0 }}</span>
+            </div>
+            {% empty %}
+            <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                No expense data for this month
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    // Income vs Expense Trend Chart
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    const monthsData = {{ months_data|safe }};
+    
+    new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: monthsData.map(d => d.month),
+            datasets: [{
+                label: 'Income',
+                data: monthsData.map(d => d.income),
+                borderColor: '#22c55e',
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'Expense',
+                data: monthsData.map(d => d.expense),
+                borderColor: '#ef4444',
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '₹' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // Category Breakdown Chart
+    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    const categoryData = {{ category_data|safe }};
+    
+    if (categoryData.length > 0) {
+        new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: categoryData.map(d => d.category__name || 'Uncategorized'),
+                datasets: [{
+                    data: categoryData.map(d => d.total),
+                    backgroundColor: [
+                        '#ef4444',
+                        '#f97316',
+                        '#f59e0b',
+                        '#eab308',
+                        '#84cc16'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    } else {
+        categoryCtx.canvas.parentElement.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-secondary);">No expense data available</div>';
+    }
+</script>
+{% endblock %}

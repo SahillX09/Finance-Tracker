@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Transaction{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 3rem auto;">
+    <div class="card">
+        <div style="margin-bottom: 2rem;">
+            <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">
+                Add New Transaction
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.9375rem;">
+                Record your income or expense to keep track of your finances
+            </p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label class="form-label">Transaction Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div style="color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem;">
+                        {{ form.title.errors.0 }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Amount (₹)</label>
+                    {{ form.amount }}
+                    {% if form.amount.errors %}
+                        <div style="color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem;">
+                            {{ form.amount.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    {{ form.date }}
+                    {% if form.date.errors %}
+                        <div style="color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem;">
+                            {{ form.date.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <div style="color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem;">
+                            {{ form.category.errors.0 }}
+                        </div>
+                    {% else %}
+                        <div style="color: var(--text-tertiary); font-size: 0.8125rem; margin-top: 0.25rem;">
+                            No categories? <a href="{% url 'add_category' %}" style="color: var(--accent); font-weight: 600; text-decoration: none;">Create one</a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    {{ form.transaction_type }}
+                    {% if form.transaction_type.errors %}
+                        <div style="color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem;">
+                            {{ form.transaction_type.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description (Optional)</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div style="color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem;">
+                        {{ form.description.errors.0 }}
+                    </div>
+                {% else %}
+                    <div style="color: var(--text-tertiary); font-size: 0.8125rem; margin-top: 0.25rem;">
+                        Add any additional details about this transaction
+                    </div>
+                {% endif %}
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    Add Transaction
+                </button>
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

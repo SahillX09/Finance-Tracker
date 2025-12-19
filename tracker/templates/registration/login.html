@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign In - MoneyMap{% endblock %}
+
+{% block content %}
+<div style="max-width: 420px; margin: 4rem auto;">
+    <div class="card" style="box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);">
+        <!-- Logo/Header Section -->
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(14, 165, 233, 0.2) 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.75rem;">
+                💰
+            </div>
+            <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); letter-spacing: -0.025em;">
+                Welcome Back
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.9375rem;">
+                Sign in to your MoneyMap account
+            </p>
+        </div>
+
+        <!-- Error Messages -->
+        {% if form.non_field_errors %}
+            <div style="background: #fee2e2; border: 1px solid #fecaca; color: #dc2626; padding: 0.875rem 1rem; border-radius: 10px; margin-bottom: 1.5rem; font-size: 0.875rem; display: flex; align-items: start; gap: 0.625rem;">
+                <span style="font-size: 1.125rem;">⚠️</span>
+                <span>{{ form.non_field_errors.0 }}</span>
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- Username Field -->
+            <div class="form-group">
+                <label class="form-label" for="id_username">
+                    <span style="display: flex; align-items: center; gap: 0.375rem;">
+                        <span>Username</span>
+                    </span>
+                </label>
+                <input type="text" 
+                       name="username" 
+                       class="form-control" 
+                       id="id_username"
+                       placeholder="Enter your username"
+                       value="{% if form.username.value %}{{ form.username.value }}{% endif %}"
+                       required
+                       autofocus
+                       style="transition: all 0.2s ease;">
+                {% if form.username.errors %}
+                    <div style="color: #dc2626; font-size: 0.875rem; margin-top: 0.375rem; display: flex; align-items: center; gap: 0.375rem;">
+                        <span>•</span>
+                        <span>{{ form.username.errors.0 }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <label class="form-label" for="id_password">
+                    <span style="display: flex; align-items: center; gap: 0.375rem;">
+                        <span>Password</span>
+                    </span>
+                </label>
+                <input type="password" 
+                       name="password" 
+                       class="form-control" 
+                       id="id_password"
+                       placeholder="Enter your password"
+                       required
+                       style="transition: all 0.2s ease;">
+                {% if form.password.errors %}
+                    <div style="color: #dc2626; font-size: 0.875rem; margin-top: 0.375rem; display: flex; align-items: center; gap: 0.375rem;">
+                        <span>•</span>
+                        <span>{{ form.password.errors.0 }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" 
+                    class="btn btn-primary" 
+                    style="width: 100%; margin-top: 0.75rem; font-size: 0.9375rem; padding: 0.75rem; font-weight: 600;">
+                Sign In
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div style="position: relative; margin: 2rem 0;">
+            <div style="position: absolute; inset: 0; display: flex; align-items: center;">
+                <div style="width: 100%; border-top: 1px solid var(--border);"></div>
+            </div>
+            <div style="position: relative; display: flex; justify-content: center;">
+                <span style="background: var(--bg-primary); padding: 0 1rem; color: var(--text-tertiary); font-size: 0.8125rem; font-weight: 500;">
+                    Don't have an account?
+                </span>
+            </div>
+        </div>
+
+        <!-- Register Link -->
+        <div style="text-align: center;">
+            <a href="{% url 'register' %}" 
+               style="display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem; color: var(--accent); font-weight: 600; text-decoration: none; font-size: 0.9375rem; transition: all 0.15s ease;">
+                <span>Create one now</span>
+                <span style="font-size: 1.125rem;">→</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Additional Help Text -->
+    <div style="text-align: center; margin-top: 2rem;">
+        <p style="color: var(--text-tertiary); font-size: 0.8125rem;">
+            Secure login powered by MoneyMap
+        </p>
+    </div>
+</div>
+
+<style>
+    /* Enhanced form field focus states */
+    input.form-control:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+    }
+    
+    input.form-control:hover:not(:focus) {
+        border-color: #cbd5e1;
+    }
+    
+    /* Button hover effect */
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+    }
+    
+    .btn-primary:active {
+        transform: translateY(0);
+    }
+    
+    /* Link hover effect */
+    a[href*="register"]:hover {
+        color: var(--accent-hover);
+    }
+</style>
+{% endblock %}
